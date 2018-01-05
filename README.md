@@ -20,6 +20,13 @@
     </a>
 </p>
 
+## Features
+
+Adds the following features to GitHub:
+
+- merged project boards. Just create a new project board and in the description put URLs to your other project boards
+- "Copy snapshot" button that puts a text summary of the project to clipboard
+
 ## Installing
 
 You can install it for [Chrome](https://chrome.google.com/webstore/detail/octoproject/hgaipodkndbjmmkjielfphdnfhgnagfj) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/octoproject/).
