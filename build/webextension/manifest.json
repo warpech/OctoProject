@@ -11,10 +11,6 @@
   },
   "options_page": "options/index.html",
   "author": "Marcin Warpechowski",
-  "background": {
-    "scripts": ["bg_script.js"],
-    "persistent": false
-  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

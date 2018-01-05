@@ -12,9 +12,6 @@
   "options_ui": {
     "page": "options/index.html"
   },
-  "background": {
-    "scripts": ["bg_script.js"]
-  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

@@ -1,4 +1,5 @@
 var projectInfo = require("./project_info");
+var projectSnapshot = require("./project_snapshot");
 
 var $$ = document.querySelectorAll.bind(document);
 var $ = document.querySelector.bind(document);
@@ -13,7 +14,7 @@ var PROJECT_DESCRIPTION = ".project-body-markdown";
 var INCLUDE_FRAGMENT = "include-fragment";
 
 function findOrgProjectUrls(text) {
-  return text.match(urlRegex);
+  return text.match(urlRegex) || [];
 }
 
 function getColumnName(elem) {
@@ -73,13 +74,16 @@ function fetchProjectPage(url) {
 function fetchAllProjects() {
   var desc = $(PROJECT_DESCRIPTION).innerText;
   var urls = findOrgProjectUrls(desc);
-  $(COLUMNS_CONTAINER).innerHTML = "";
-  urls.forEach((url) => fetchProjectPage("https://" + url));
-  projectInfo.setProjectTitle(projectInfo.getProjectTitle() + ` (merged ${urls.length} projects)`);
+  if (urls.length > 1) {
+    $(COLUMNS_CONTAINER).innerHTML = "";
+    urls.forEach((url) => fetchProjectPage("https://" + url));
+    projectInfo.setProjectTitle(projectInfo.getProjectTitle() + ` (merged ${urls.length} projects)`);
+  }  
 }
 
 function main() {
   fetchAllProjects();
+  projectSnapshot.addSnapshotButton();
 }
 
 main();
