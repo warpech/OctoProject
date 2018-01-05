@@ -10,6 +10,20 @@
 
 <h4 align="center">Browser extension that helps to work with multiple projects on GitHub</h4>
 
+<p align="center">
+  <a href="https://chrome.google.com/webstore/detail/octoproject/hgaipodkndbjmmkjielfphdnfhgnagfj">
+    <img src="https://img.shields.io/chrome-web-store/v/hgaipodkndbjmmkjielfphdnfhgnagfj.svg"
+         alt="Chrome Web Store">
+  </a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/octoproject/">
+    <img src="https://img.shields.io/amo/v/octoproject.svg">
+    </a>
+</p>
+
+## Installing
+
+You can install it for [Chrome](https://chrome.google.com/webstore/detail/octoproject/hgaipodkndbjmmkjielfphdnfhgnagfj) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/octoproject/).
+
 ## Build Setup
 
 ``` bash
