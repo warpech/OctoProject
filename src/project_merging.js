@@ -48,6 +48,24 @@ function mergeColumns(elem) {
     }
   });
   removeList.forEach((elem) => elem.parentNode.removeChild(elem));
+
+  var cards = Array.from(document.querySelectorAll(".project-card.js-updatable-content.draggable.js-keyboard-movable"));
+  cards.forEach((card) => {
+    card.classList.remove("js-updatable-content", "draggable", "js-keyboard-movable");
+  });
+}
+
+function addCustomStyles() {
+  var ss = document.createElement("style");
+  ss.innerHTML = `.project-card {
+  pointer-events: none;
+}
+
+.project-card a,
+.project-card button {
+  pointer-events: all;
+}`;
+  document.head.appendChild(ss);
 }
 
 function fetchProjectPage(url) {
@@ -78,6 +96,7 @@ function fetchAllProjects() {
     $(COLUMNS_CONTAINER).innerHTML = "";
     urls.forEach((url) => fetchProjectPage("https://" + url));
     projectInfo.setProjectTitle(projectInfo.getProjectTitle() + ` (merged ${urls.length} projects)`);
+    addCustomStyles();
   }  
 }
 
