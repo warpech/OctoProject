@@ -25,7 +25,7 @@ module.exports = function generateConfig(type) {
       ]
     }
   ];
-  if (process.env.NODE_ENV === 'production2') {
+  if (process.env.NODE_ENV === 'production_') {
     configurations.forEach(config => {
       // http://vue-loader.vuejs.org/en/workflow/production.html
       config.plugins = (config.plugins || []).concat([
