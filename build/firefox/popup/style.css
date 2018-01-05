@@ -1,0 +1,7 @@
+body {
+  width: 350px;
+  padding: 5px;
+}
+body * {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
