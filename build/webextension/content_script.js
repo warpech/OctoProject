@@ -60,12 +60,41 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports) {
+
+function getTextNode(node) {
+	return Array.from(node.childNodes).filter(f => f.nodeType === Node.TEXT_NODE && f.textContent.trim() != "")[0];
+}
+
+function findTitleElement() {
+	return document.querySelector(".project-header h3");
+}
+
+exports.getProjectTitle = function() {
+	return getTextNode(findTitleElement()).textContent;
+};
+
+exports.setProjectTitle = function(str) {
+	getTextNode(findTitleElement()).textContent = str;
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(2);
+__webpack_require__(0);
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var projectInfo = __webpack_require__(0);
 
 var $$ = document.querySelectorAll.bind(document);
 var $ = document.querySelector.bind(document);
@@ -142,6 +171,7 @@ function fetchAllProjects() {
   var urls = findOrgProjectUrls(desc);
   $(COLUMNS_CONTAINER).innerHTML = "";
   urls.forEach((url) => fetchProjectPage("https://" + url));
+  projectInfo.setProjectTitle(projectInfo.getProjectTitle() + ` (merged ${urls.length} projects)`);
 }
 
 function main() {

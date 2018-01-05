@@ -1,3 +1,5 @@
+var projectInfo = require("./project_info");
+
 var $$ = document.querySelectorAll.bind(document);
 var $ = document.querySelector.bind(document);
 var urlRegex = /((github\.com\/orgs\/)([^\/]+)\/projects\/([\d])+)/g;
@@ -73,6 +75,7 @@ function fetchAllProjects() {
   var urls = findOrgProjectUrls(desc);
   $(COLUMNS_CONTAINER).innerHTML = "";
   urls.forEach((url) => fetchProjectPage("https://" + url));
+  projectInfo.setProjectTitle(projectInfo.getProjectTitle() + ` (merged ${urls.length} projects)`);
 }
 
 function main() {

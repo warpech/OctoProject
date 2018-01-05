@@ -6,7 +6,7 @@ const BabiliPlugin = require('babili-webpack-plugin');
 module.exports = function generateConfig(type) {
   const configurations =  [
     {
-      entry: './src/content_script.js',
+      entry: './src/index.js',
       output: {
         path: path.resolve(__dirname, `./build/${type}/`),
         filename: 'content_script.js'
