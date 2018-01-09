@@ -187,11 +187,11 @@ function fetchProjectPage(url) {
   });
 }
 
-function fetchAllProjects() {
+function fetchAllProjects(container) {
   var desc = $(PROJECT_DESCRIPTION).innerText;
   var urls = findOrgProjectUrls(desc);
   if (urls.length > 1) {
-    $(COLUMNS_CONTAINER).innerHTML = "";
+    container.innerHTML = "";
     urls.forEach((url) => fetchProjectPage("https://" + url));
     projectInfo.setProjectTitle(projectInfo.getProjectTitle() + ` (merged ${urls.length} projects)`);
     addCustomStyles();
@@ -199,8 +199,11 @@ function fetchAllProjects() {
 }
 
 function main() {
-  fetchAllProjects();
-  projectSnapshot.addSnapshotButton();
+  var container = $(COLUMNS_CONTAINER);
+  if (container) {
+    fetchAllProjects(container);
+    projectSnapshot.addSnapshotButton();
+  }
 }
 
 main();
