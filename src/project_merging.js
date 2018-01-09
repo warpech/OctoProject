@@ -22,37 +22,39 @@ function getColumnName(elem) {
 }
 
 function getColumnByName(elem, name) {
-  return Array.from(elem.querySelectorAll(COLUMN_NAME)).find((node) => node.innerText === name);
+  return Array.from(elem.querySelectorAll(COLUMN_NAME)).find((node) => node.innerText === name).closest(PROJECT_COLUMN);
 }
 
 function updateCardCount(elem) {
-  elem.querySelector(CARD_COUNT).innerHTML = elem.querySelectorAll(COLUMN_CARD).length;
+  var card = elem.querySelector(CARD_COUNT);
+  var lastCount = elem.querySelectorAll(COLUMN_CARD).length;
+  if (card.lastCount !== lastCount) {
+    card.lastCount = lastCount;
+    card.innerHTML = lastCount;
+  }
 }
 
-function mergeColumns(elem) {
-  var keepers = {};
-  var removeList = [];
-  elem.querySelectorAll(PROJECT_COLUMN).forEach((column) => {
-    var name = getColumnName(column);
-    if (keepers[name]) {
-      //merge
-      var cards = keepers[name].querySelector(COLUMN_CARDS);
-      var cardsToMove = column.querySelectorAll(COLUMN_CARD);
-      if (cardsToMove.length) {
-        cardsToMove.forEach((card) => cards.appendChild(card));
-        updateCardCount(keepers[name]);
-      }
-      removeList.push(column);
-    } else {
-      keepers[name] = column;
-    }
-  });
-  removeList.forEach((elem) => elem.parentNode.removeChild(elem));
+function mergeColumns(container, column) {
+  var name = getColumnName(column);
+  var original = getColumnByName(container, name);
+  if (original == column) {
+    var observer = new MutationObserver(function(mutationsList) {
+      updateCardCount(original);
+    });
+    observer.observe(original.querySelector(COLUMN_CARDS), {
+      childList: true
+    });
+    return;
+  }
 
-  var cards = Array.from(document.querySelectorAll(".project-card.js-updatable-content.draggable.js-keyboard-movable"));
-  cards.forEach((card) => {
+  var cards = original.querySelector(COLUMN_CARDS);
+  var cardsToMove = column.querySelectorAll(COLUMN_CARD);
+  cardsToMove.forEach((card) => cards.appendChild(card));
+  cardsToMove.forEach((card) => {
     card.classList.remove("js-updatable-content", "draggable", "js-keyboard-movable");
   });
+
+  container.removeChild(column);
 }
 
 function addCustomStyles() {
@@ -84,7 +86,7 @@ function fetchProjectPage(url) {
     let container = $(COLUMNS_CONTAINER);
     elems.forEach((elem) => {
       container.appendChild(elem);
-      elem.querySelector(INCLUDE_FRAGMENT).addEventListener("load", () => mergeColumns(container)); //include-fragment element dispatches that event    
+      elem.querySelector(INCLUDE_FRAGMENT).addEventListener("load", () => mergeColumns(container, elem)); //include-fragment element dispatches that event    
     });
   });
 }
@@ -97,7 +99,7 @@ function fetchAllProjects() {
     urls.forEach((url) => fetchProjectPage("https://" + url));
     projectInfo.setProjectTitle(projectInfo.getProjectTitle() + ` (merged ${urls.length} projects)`);
     addCustomStyles();
-  }  
+  }
 }
 
 function main() {
