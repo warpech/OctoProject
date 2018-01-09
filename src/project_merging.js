@@ -41,8 +41,8 @@ function mergeColumns(elem) {
       if (cardsToMove.length) {
         cardsToMove.forEach((card) => cards.appendChild(card));
         updateCardCount(keepers[name]);
-        removeList.push(column);
       }
+      removeList.push(column);
     } else {
       keepers[name] = column;
     }
