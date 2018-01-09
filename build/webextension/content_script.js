@@ -106,7 +106,7 @@ var COLUMN_CARD = ".project-card";
 var COLUMN_CARDS = ".js-project-column-cards";
 var PROJECT_COLUMN = ".project-column";
 var COLUMNS_CONTAINER = ".project-columns-container";
-var PROJECT_DESCRIPTION = ".project-body-markdown";
+var PROJECT_DESCRIPTION = ".project-body-markdown:last-of-type"; //multiline descriptions are divided into shown and hidden
 var INCLUDE_FRAGMENT = "include-fragment";
 
 function findOrgProjectUrls(text) {
