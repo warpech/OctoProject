@@ -10,7 +10,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "clipboard": "^1.7.1"
+    "clipboard-copy": "^1.2.0"
   },
   "browserslist": [
     "> 1%",
