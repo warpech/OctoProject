@@ -264,15 +264,17 @@ exports.addSnapshotButton = function(str) {
 	var menuButton = findMenuButton();
 	var snapshotButton = menuButton.cloneNode(true);
 
+	snapshotButton.className = "pr-3 pl-4";
+
 	var snapshotButtonButton = snapshotButton.querySelector("button");
-	snapshotButtonButton.className = "btn-link muted-link v-align-middle no-underline";
-	snapshotButtonButton.innerHTML = copyIconSvg + " Copy snapshot";
+	snapshotButtonButton.className = "btn-link muted-link v-align-middle no-underline project-header-link";
+	snapshotButtonButton.innerHTML = copyIconSvg + " Snapshot";
 
 	new Clipboard(snapshotButtonButton, {
 		text: makeProjectSnapshot
 	});
 
-	menuButton.parentNode.insertBefore(snapshotButton, menuButton);
+	menuButton.parentNode.insertBefore(snapshotButton, menuButton.parentNode.firstElementChild);
 };
 
 /***/ }),
