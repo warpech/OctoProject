@@ -48,7 +48,7 @@ function makeProjectSnapshot(oldSnapshot) {
 				md = `- [${name}](${url})`;
 			}
 
-			const found = findInArray(oldSnapshot, url);
+			const found = findInArray(oldSnapshot, `(${url})`);
 			if (found == null) {
 				sb.push(md, newLine);
 
