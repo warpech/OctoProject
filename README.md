@@ -25,7 +25,7 @@
 Adds the following features to GitHub:
 
 - merged project boards. Just create a new project board and in the description put URLs to your other project boards
-- "Copy snapshot" button that puts a text summary of the project to clipboard
+- "Copy snapshot" button that puts a text summary of the project to clipboard. You can make a new snapshot or an incremental update at the end of an existing snapshot.
 
 ## Installing
 
