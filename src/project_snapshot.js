@@ -11,7 +11,7 @@ function escapeSpecialMarkdownChars(str) {
 
 function makeProjectSnapshot(oldSnapshot) {
 	let sb = [];
-	const newLine = "\r\n";
+	const newLine = "\n";
 	const title = document.querySelector("h3.d-flex.flex-items-center.f5");
 	const cols = document.querySelectorAll("div.project-column");
 	const date = new Date();
@@ -61,7 +61,7 @@ function makeProjectSnapshot(oldSnapshot) {
 		sb.push(newLine)
 	}
 
-	let out = oldSnapshot.join("\r\n") + newLine + newLine + sb.join("");
+	let out = oldSnapshot.join(newLine) + newLine + newLine + sb.join("");
 	return out.trim();
 }
 
@@ -171,6 +171,7 @@ function createModal() {
 
 	modal.openModal = function() {
 		const url = getSnapshotSourceUrl();
+		modal.querySelector("input").value = url;
 		modal.style.display = "block";
 		modal.prepareSnapshotIfUrlProvided(modal);
 	};
@@ -202,7 +203,6 @@ function createModal() {
 
 			const editableUrl = url.replace(blobUrlRegex, "https://github.com/$2/$3/edit/$4");
 			fetchSnapshotSource(editableUrl).catch((err) => {
-				console.log("ada", err);
 				modal.renderResult("URL cannot be resolved", "flash-error");
 				return Promise.reject(err);
 			}).then((res) => {
