@@ -1,15 +1,25 @@
 const { GraphQLClient } = require('graphql-request');
 const args = require('yargs').argv;
 const { applyNewIssuesToSnapshot } = require('./project_snapshot.js');
-
-
-
+const resolvePath = require('resolve-path');
 
 
 if (!args.token) {
 	console.error("GitHub personal access token is missing. Provide it with --token=XXXXX");
 	process.exit(1);
 }
+if (!args.config) {
+	console.error("Path to the config file is missing. Provide it with --config=XXXXX");
+	process.exit(1);
+}
+
+var configFullPath = resolvePath(process.cwd(), args.config)
+var file = require(configFullPath);
+if (!file.queries) {
+	console.error("Config file does not contain 'queries' array");
+	process.exit(1);
+}
+const queries = file.queries;
 
 const client = new GraphQLClient('https://api.github.com/graphql', {
   headers: {
@@ -78,12 +88,6 @@ function fetchPage(data, query, pageNum, cursor) {
   });
 }
 
-
-
-var queries = [
-  "repo:Starcounter/Blending is:open",
-  "repo:Starcounter/DevTools is:open"
-];
 /*
 function recursiveAll( array ) {
     // Wait for the promises to resolve

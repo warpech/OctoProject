@@ -3,6 +3,7 @@ const copyIconSvg = `<svg aria-hidden="true" class="octicon octicon-clippy" heig
 const copy = require('clipboard-copy');
 
 function escapeSpecialMarkdownChars(str) {
+	str = str.replace(/\s+/g, " ");
 	str = str.replace(/</g, "&lt;");
 	str = str.replace(/>/g, "&gt;");
 	str = str.replace(/_/g, "\\_");
@@ -22,15 +23,20 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot) {
 	for (let j = 0; j < issues.length; j++) {
 		const issue = issues[j];
 
+		let title = escapeSpecialMarkdownChars(issue.title);
+		title = title.trim();
+
+		const isClosed = issue.state == "CLOSED" || issue.state == "MERGED";
+
 		let md;
-		if (issue.state == "CLOSED" || issue.state == "MERGED") {
-			md = `- ~~[${issue.title}](${issue.url})~~`;
+		if (isClosed) {
+			md = `- ~~[${title}](${issue.url})~~`;
 		} else {
-			md = `- [${issue.title}](${issue.url})`;
+			md = `- [${title}](${issue.url})`;
 		}
 
 		const found = findInArray(oldSnapshot, `(${issue.url})`);
-		if (found == null) {
+		if (found == null && !isClosed) {
 			sb.push(md, newLine);
 
 		} else {
@@ -55,7 +61,7 @@ function makeProjectSnapshot(oldSnapshot) {
 		for (let j = 0; j < issues.length; j++) {
 			const issue = issues[j];
 			const url = issue.href;
-			let name = escapeSpecialMarkdownChars(issue.innerText);
+			let name = issue.innerText;
 
 			const cardState = issue.parentNode.parentNode.dataset.cardState;
 			const isClosed = cardState ? cardState.indexOf("closed") > -1 : false;

@@ -1,0 +1,26 @@
+{
+  "queries": [
+    "repo:Starcounter/Website",
+    "repo:Starcounter/SampleWebsiteTheme",
+    "repo:Starcounter/StarcounterClientFiles",
+    "repo:Starcounter/ViewTranslator",
+    "repo:Starcounter/CompositionProvider",
+    "repo:Starcounter/HelloWorld-ReactNative",
+    "repo:Starcounter/KitchenSink",
+    "repo:Starcounter/starcounter.github.io",
+    "repo:Starcounter/HelloWorld-React",
+    "repo:Starcounter/starcounter-layout-html-editor",
+    "repo:Starcounter/DisplayAppTitle",
+    "repo:Starcounter/CompositionEditor",
+    "repo:Starcounter/CssVariablesManager",
+    "repo:Starcounter/starcounter-include",
+    "repo:Starcounter/starcounter-upload",
+    "repo:Starcounter/PalindromBenchmark",
+    "repo:Starcounter/Blending",
+    "repo:Starcounter/DevTools",
+    "repo:Starcounter/Underwear.css",
+    "org:Palindrom",
+    "org:Juicy -repo:Juicy/juicy-tile-grid -repo:Juicy/juicy-tile-editor -repo:Juicy/juicy-table-repeat -repo:Juicy/juicy-composer",
+    "org:Starcounter label:web"
+  ]
+}
