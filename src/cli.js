@@ -1,5 +1,10 @@
 const { GraphQLClient } = require('graphql-request');
 const args = require('yargs').argv;
+const { applyNewIssuesToSnapshot } = require('./project_snapshot.js');
+
+
+
+
 
 if (!args.token) {
 	console.error("GitHub personal access token is missing. Provide it with --token=XXXXX");
@@ -23,8 +28,8 @@ function bota(input) {
 var issues = [];
 
 function fetchPage(data, query, pageNum, cursor) {
-  console.log("querying for query", query);
-  console.log("querying for page", pageNum);
+  //console.log("querying for query", query);
+  //console.log("querying for page", pageNum);
 
   var after = "";
   if (cursor) {
@@ -32,7 +37,7 @@ function fetchPage(data, query, pageNum, cursor) {
   }
 
   const graphQlQuery = `query {
-  search(first: 10, type: ISSUE, query: "${query}" ${after}) {
+  search(first: 100, type: ISSUE, query: "${query}" ${after}) {
   	pageInfo {
       startCursor
       hasNextPage
@@ -57,7 +62,7 @@ function fetchPage(data, query, pageNum, cursor) {
 
   return client.request(graphQlQuery).then((data) => {
     data.search.edges.forEach((issue) => {
-      console.log(issue);
+	    issues.push(issue.node);
     });
 
     //console.log("hasNextPage", data.search.pageInfo.hasNextPage);
@@ -76,8 +81,8 @@ function fetchPage(data, query, pageNum, cursor) {
 
 
 var queries = [
-  "repo:Starcounter/Blending",
-  "repo:Starcounter/DevTools"
+  "repo:Starcounter/Blending is:open",
+  "repo:Starcounter/DevTools is:open"
 ];
 /*
 function recursiveAll( array ) {
@@ -98,9 +103,30 @@ function fetchPages(issues, queries) {
     var promise = fetchPage(issues, query, pageNum);
     promises.push(promise);
   });
-  Promise.all(promises).then(() => {
-    console.log("FINISHED");
-  });
+  return Promise.all(promises).then(() => {
+  	return issues;
+  })
 }
 
-fetchPages(issues, queries);
+
+
+
+function fetchAll (oldSnapshot) {
+	fetchPages(issues, queries).then((issues) => {
+	    var res = applyNewIssuesToSnapshot(issues, oldSnapshot);
+	    console.log(res);
+	    process.exit();
+    });
+}
+
+const getStdin = require('get-stdin');
+ 
+
+var noStdIn = setTimeout(() => {
+	fetchAll();
+}, 1000);
+
+getStdin().then(str => {
+	clearTimeout(noStdIn);
+	fetchAll(str);
+});

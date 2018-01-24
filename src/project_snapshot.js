@@ -9,29 +9,48 @@ function escapeSpecialMarkdownChars(str) {
 	return str;
 }
 
-function makeProjectSnapshot(oldSnapshot) {
+exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot) {
 	let sb = [];
 	const newLine = "\n";
-	const title = document.querySelector("h3.d-flex.flex-items-center.f5");
-	const cols = document.querySelectorAll("div.project-column");
-	const date = new Date();
 
 	oldSnapshot = oldSnapshot || "";
 	oldSnapshot = oldSnapshot.replace(/\r\n/g, "\n");
 	oldSnapshot = oldSnapshot.split("\n");
 
-	sb.push("# ", title.innerText, " - ", date.getFullYear(), ".", (date.getMonth() + 1), ".", date.getDate(), newLine, newLine);
+	//console.log(oldSnapshot);
+
+	for (let j = 0; j < issues.length; j++) {
+		const issue = issues[j];
+
+		let md;
+		if (issue.state == "CLOSED" || issue.state == "MERGED") {
+			md = `- ~~[${issue.title}](${issue.url})~~`;
+		} else {
+			md = `- [${issue.title}](${issue.url})`;
+		}
+
+		const found = findInArray(oldSnapshot, `(${issue.url})`);
+		if (found == null) {
+			sb.push(md, newLine);
+
+		} else {
+			oldSnapshot[found] = md;
+		}
+	}
+
+	let out = oldSnapshot.join(newLine) + newLine + newLine + sb.join("");
+	return out.trim();
+};
+
+function makeProjectSnapshot(oldSnapshot) {
+	const title = document.querySelector("h3.d-flex.flex-items-center.f5");
+	const cols = document.querySelectorAll("div.project-column");
+	const allIssues = [];
 
 	for (let i = 0; i < cols.length; i++) {
 		const col = cols[i];
-		const title = col.querySelector("span.js-project-column-name").innerText;
-
-		sb.push("### ", title);
 
 		const issues = col.querySelectorAll("a.h5.d-block");
-
-		sb.push(" (", issues.length, ")");
-		sb.push(newLine, newLine);
 
 		for (let j = 0; j < issues.length; j++) {
 			const issue = issues[j];
@@ -41,28 +60,15 @@ function makeProjectSnapshot(oldSnapshot) {
 			const cardState = issue.parentNode.parentNode.dataset.cardState;
 			const isClosed = cardState ? cardState.indexOf("closed") > -1 : false;
 
-			let md;
-			if (isClosed) {
-				md = `- ~~[${name}](${url})~~`;
-			} else {
-				md = `- [${name}](${url})`;
-			}
-
-			const found = findInArray(oldSnapshot, `(${url})`);
-			if (found == null) {
-				sb.push(md, newLine);
-
-			} else {
-				oldSnapshot[found] = md;
-			}
-
+			allIssues.push({
+				title: name,
+				url: url,
+				state: isClosed ? "CLOSED" : "OPEN"
+			});
 		}
-
-		sb.push(newLine)
 	}
 
-	let out = oldSnapshot.join(newLine) + newLine + newLine + sb.join("");
-	return out.trim();
+	return exports.applyNewIssuesToSnapshot(allIssues, oldSnapshot);
 }
 
 function findMenuButton() {
