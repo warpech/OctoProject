@@ -10,7 +10,9 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "clipboard-copy": "^1.2.0"
+    "clipboard-copy": "^1.2.0",
+    "graphql-request": "^1.4.1",
+    "yargs": "^11.0.0"
   },
   "browserslist": [
     "> 1%",
