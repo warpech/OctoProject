@@ -117,9 +117,10 @@ function fetchPages(issues, queries) {
 
 function fetchAll (oldSnapshot) {
 	fetchPages(issues, queries).then((issues) => {
-	    var res = applyNewIssuesToSnapshot(issues, oldSnapshot);
-	    console.log(res);
-	    process.exit();
+      var res = applyNewIssuesToSnapshot(issues, oldSnapshot);
+      const lines = res.split("\n");
+      lines.forEach(line => process.stdout.write(`${line}\n`));
+      process.exit();
     });
 }
 
