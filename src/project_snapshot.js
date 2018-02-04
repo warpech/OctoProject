@@ -38,9 +38,10 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot) {
 		}
 
 		const found = findInArray(oldSnapshot, `(${issue.url})`);
-		if (found == null && !isClosed) {
-			sb.push(md, newLine);
-
+		if (found == null) {
+			if (!isClosed) {
+				sb.push(md, newLine);
+			}
 		} else {
 			oldSnapshot[found] = md;
 		}
