@@ -20,7 +20,11 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot) {
 	oldSnapshot = oldSnapshot.replace(/\r\n/g, "\n");
 	oldSnapshot = oldSnapshot.split("\n");
 
-	//console.log(oldSnapshot);
+	oldSnapshot.forEach((row, index) => {
+		if (row.indexOf('](') > -1) {
+			oldSnapshot[index] += " status unknown"
+		}
+	});
 
 	for (let j = 0; j < issues.length; j++) {
 		const issue = issues[j];
