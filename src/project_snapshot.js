@@ -7,6 +7,8 @@ function escapeSpecialMarkdownChars(str) {
 	str = str.replace(/</g, "&lt;");
 	str = str.replace(/>/g, "&gt;");
 	str = str.replace(/_/g, "\\_");
+	str = str.replace(/\[/g, "");
+	str = str.replace(/\]/g, "");
 	return str;
 }
 
