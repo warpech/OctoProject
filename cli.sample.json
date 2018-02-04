@@ -19,8 +19,12 @@
     "repo:Starcounter/Blending",
     "repo:Starcounter/DevTools",
     "repo:Starcounter/Underwear.css",
+    "repo:Starcounter/Uniform.css",
+    "repo:Starcounter-Jack/JSON-Patch",
+    "repo:Starcounter/ReleaseJournal",
     "org:Palindrom",
     "org:Juicy -repo:Juicy/juicy-tile-grid -repo:Juicy/juicy-tile-editor -repo:Juicy/juicy-table-repeat -repo:Juicy/juicy-composer",
-    "org:Starcounter label:web"
+    "org:Starcounter label:web",
+    "org:Starcounter assignee:warpech assignee:tomalec assignee:PatrykSzwer assignee:alshakero assignee:kegor"
   ]
 }
