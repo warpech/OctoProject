@@ -42,10 +42,14 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 	for (let j = 0; j < issues.length; j++) {
 		const issue = issues[j];
 
+		const isClosed = issue.state == "CLOSED" || issue.state == "MERGED";
+		const isPR = issue.url.indexOf("pull") > -1;
+
 		let title = escapeSpecialMarkdownChars(issue.title);
 		title = title.trim();
-
-		const isClosed = issue.state == "CLOSED" || issue.state == "MERGED";
+		if (isPR) {
+			title = `⛕ ${title}`
+		}
 
 		let md;
 		if (isClosed) {
