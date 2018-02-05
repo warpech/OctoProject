@@ -54,7 +54,10 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 			md = `- [${title}](${issue.url})`;
 		}
 
-		const found = findInArray(oldSnapshot, `(${issue.url})`);
+		let found = findInArray(oldSnapshot, `(${issue.url})`);
+		if (found == null) {
+			found = findInArray(oldSnapshot, `(${issue.url.replace("/pull/", "/issues/")})`);
+		}
 		if (found == null) {
 			if (!isClosed) {
 				sb.push(md, newLine);
