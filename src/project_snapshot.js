@@ -53,7 +53,7 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 
 		let md;
 		if (isClosed) {
-			md = `- ~~[${title}](${issue.url})~~`;
+			md = `- _~~[${title}](${issue.url})~~_`;
 		} else {
 			md = `- [${title}](${issue.url})`;
 		}
