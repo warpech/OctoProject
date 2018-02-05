@@ -2,6 +2,8 @@ const copyIconSvg = `<svg aria-hidden="true" class="octicon octicon-clippy" heig
 
 const copy = require('clipboard-copy');
 
+const URI_IN_MARKDOWN = /\]\((http[^\)]*)\)/i;
+
 function escapeSpecialMarkdownChars(str) {
 	str = str.replace(/\s+/g, " ");
 	str = str.replace(/</g, "&lt;");
@@ -12,7 +14,7 @@ function escapeSpecialMarkdownChars(str) {
 	return str;
 }
 
-exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot) {
+exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched) {
 	let sb = [];
 	const newLine = "\n";
 
@@ -20,10 +22,21 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot) {
 	oldSnapshot = oldSnapshot.replace(/\r\n/g, "\n");
 	oldSnapshot = oldSnapshot.split("\n");
 
+	var urlHits = new Set();
 	oldSnapshot.forEach((row, index) => {
-		if (row.indexOf('](') > -1) {
-			oldSnapshot[index] += " status unknown"
+		var res = row.match(URI_IN_MARKDOWN);
+		if (res != null) {
+			var url = res[1];
+			if(urlHits.has(url)) {
+				oldSnapshot[index] = "remove this line";
+			}
+			else {
+				urlHits.add(url);
+			}
 		}
+	});
+	oldSnapshot = oldSnapshot.filter((row) => {
+		return row !== "remove this line";
 	});
 
 	for (let j = 0; j < issues.length; j++) {
@@ -48,10 +61,22 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot) {
 			}
 		} else {
 			oldSnapshot[found] = md;
+
+			var indexInHits
+			if(urlHits.has(issue.url)) {
+				urlHits.delete(issue.url)
+			}
 		}
 	}
 
-	let out = oldSnapshot.join(newLine) + newLine + newLine + sb.join("");
+ 	let out;
+	if (returnUnmatched) {
+		return Array.from(urlHits).join(newLine);
+	}
+	else {
+		out = oldSnapshot.join(newLine) + newLine + newLine + sb.join("");
+	}
+	
 	return out.trim();
 };
 
