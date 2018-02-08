@@ -72,8 +72,12 @@ function fetchPage(data, query, pageNum, cursor) {
 
   return client.request(graphQlQuery).then((data) => {
     data.search.edges.forEach((issue) => {
-	    issues.push(issue.node);
+      if(!issues.find(node => node.url == issue.node.url)) {
+        issues.push(issue.node);
+      }
     });
+
+    issues.sort((a, b) => a.url < b.url);
 
     //console.log("hasNextPage", data.search.pageInfo.hasNextPage);
     if (data.search.pageInfo.hasNextPage) {
