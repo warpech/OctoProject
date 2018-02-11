@@ -47,15 +47,14 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 
 		let title = escapeSpecialMarkdownChars(issue.title);
 		title = title.trim();
-		if (isPR) {
-			title = `🔀 ${title}`
-		}
 
 		let md;
 		if (isClosed) {
-			md = `- _~~[${title}](${issue.url})~~_`;
+			md = `- ~~[${title}](${issue.url})~~`;
+		} else if(isPR) {
+			md = `- [🔀 ${title}](${issue.url})`;
 		} else {
-			md = `- [${title}](${issue.url})`;
+			md = `- [🔅 ${title}](${issue.url})`;
 		}
 
 		let found = findInArray(oldSnapshot, `(${issue.url})`);
