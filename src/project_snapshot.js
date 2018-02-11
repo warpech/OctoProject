@@ -48,7 +48,7 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 		let title = escapeSpecialMarkdownChars(issue.title);
 		title = title.trim();
 		if (isPR) {
-			title = `⛕ ${title}`
+			title = `🔀 ${title}`
 		}
 
 		let md;
