@@ -56,11 +56,17 @@ function fetchPage(data, query, pageNum, cursor) {
     edges {
       node {
         ... on Issue {
+          repository {
+            name
+          }
           title
           url
           state
         }
         ... on PullRequest {
+          repository {
+            name
+          }
           title
           url
           state

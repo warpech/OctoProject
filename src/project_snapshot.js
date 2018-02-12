@@ -50,11 +50,11 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 
 		let md;
 		if (isClosed) {
-			md = `- ~~[${title}](${issue.url})~~`;
+			md = `- ~~${issue.repository.name} [${title}](${issue.url})~~`;
 		} else if(isPR) {
-			md = `- [🔀 ${title}](${issue.url})`;
+			md = `- ${issue.repository.name} [🔀 ${title}](${issue.url})`;
 		} else {
-			md = `- [🔅 ${title}](${issue.url})`;
+			md = `- ${issue.repository.name} [🔅 ${title}](${issue.url})`;
 		}
 
 		let found = findInArray(oldSnapshot, `(${issue.url})`);
