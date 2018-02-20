@@ -21,7 +21,7 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 	const newLine = "\n";
 
 	oldSnapshot = oldSnapshot || "";
-	oldSnapshot = oldSnapshot.trim();
+	oldSnapshot = oldSnapshot.trim() + "\n";
 	oldSnapshot = oldSnapshot.replace(/\r\n/g, "\n");
 	oldSnapshot = oldSnapshot.split("\n");
 
