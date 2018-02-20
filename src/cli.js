@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { GraphQLClient } = require('graphql-request');
 const args = require('yargs').argv;
 const { applyNewIssuesToSnapshot } = require('./project_snapshot.js');
