@@ -42,6 +42,8 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 		return row !== "remove this line";
 	});
 
+	let hasNewlyAddedItems = !!findInArray(oldSnapshot, NEWLY_ADDED_ITEMS_HEADING);
+
 	for (let j = 0; j < issues.length; j++) {
 		const issue = issues[j];
 
@@ -60,8 +62,6 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 			md = `- ${issue.repository.name} [🔅 ${title}](${issue.url})`;
 		}
 
-		let hasNewlyAddedItems = !!findInArray(oldSnapshot, NEWLY_ADDED_ITEMS_HEADING);
-
 		let found = findInArray(oldSnapshot, `(${issue.url})`);
 		if (found == null) {
 			found = findInArray(oldSnapshot, `(${issue.url.replace("/pull/", "/issues/")})`);
@@ -70,6 +70,7 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 			if (!isClosed) {
 				if (!hasNewlyAddedItems) {
 					sb.push(newLine, newLine, NEWLY_ADDED_ITEMS_HEADING, newLine);
+					hasNewlyAddedItems = true;
 				}
 				sb.push(md, newLine);
 			}
