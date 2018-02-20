@@ -94,7 +94,8 @@ function fetchPage(data, query, pageNum, cursor) {
     }
 
   }).catch((err) => {
-    console.log("error", err)
+    console.error("Error in GraphQL request", err);
+    process.exit(1);
   });
 }
 
@@ -119,7 +120,10 @@ function fetchPages(issues, queries) {
   });
   return Promise.all(promises).then(() => {
   	return issues;
-  })
+  }).catch((err) => {
+    console.error("Error in fetching pages", err);
+    process.exit(1);
+  });
 }
 
 
@@ -131,6 +135,9 @@ function fetchAll (oldSnapshot) {
       const lines = res.split("\n");
       lines.forEach(line => process.stdout.write(`${line}\n`));
       process.exit();
+    }).catch((err) => {
+      console.error("Error in creating Markdown", err);
+      process.exit(1);
     });
 }
 
