@@ -1,0 +1,8 @@
+{
+  "queries": [
+    "repo:Starcounter/Blending",
+    "org:Palindrom",
+    "org:Starcounter label:web",
+    "org:Starcounter assignee:warpech"
+  ]
+}
