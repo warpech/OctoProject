@@ -4,6 +4,8 @@ const copy = require('clipboard-copy');
 
 const URI_IN_MARKDOWN = /\]\((http[^\)]*)\)/i;
 
+const NEWLY_ADDED_ITEMS_HEADING = `## Newly added items`;
+
 function escapeSpecialMarkdownChars(str) {
 	str = str.replace(/\s+/g, " ");
 	str = str.replace(/</g, "&lt;");
@@ -19,6 +21,7 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 	const newLine = "\n";
 
 	oldSnapshot = oldSnapshot || "";
+	oldSnapshot = oldSnapshot.trim();
 	oldSnapshot = oldSnapshot.replace(/\r\n/g, "\n");
 	oldSnapshot = oldSnapshot.split("\n");
 
@@ -57,12 +60,17 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 			md = `- ${issue.repository.name} [🔅 ${title}](${issue.url})`;
 		}
 
+		let hasNewlyAddedItems = !!findInArray(oldSnapshot, NEWLY_ADDED_ITEMS_HEADING);
+
 		let found = findInArray(oldSnapshot, `(${issue.url})`);
 		if (found == null) {
 			found = findInArray(oldSnapshot, `(${issue.url.replace("/pull/", "/issues/")})`);
 		}
 		if (found == null) {
 			if (!isClosed) {
+				if (!hasNewlyAddedItems) {
+					sb.push(newLine, newLine, NEWLY_ADDED_ITEMS_HEADING, newLine);
+				}
 				sb.push(md, newLine);
 			}
 		} else {
@@ -80,7 +88,7 @@ exports.applyNewIssuesToSnapshot = function(issues, oldSnapshot, returnUnmatched
 		return Array.from(urlHits).join(newLine);
 	}
 	else {
-		out = oldSnapshot.join(newLine) + newLine + newLine + sb.join("");
+		out = oldSnapshot.join(newLine) + sb.join("");
 	}
 	
 	return out.trim();
