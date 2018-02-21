@@ -3,9 +3,9 @@
 const { GraphQLClient } = require('graphql-request');
 const args = require('yargs').argv;
 const { applyNewIssuesToSnapshot } = require('./project_snapshot.js');
-const resolvePath = require('resolve-path');
-
-
+const path = require('path');
+const fs = require('fs');
+ 
 if (!args.token) {
 	console.error("GitHub personal access token is missing. Provide it with --token=XXXXX");
 	process.exit(1);
@@ -15,7 +15,7 @@ if (!args.config) {
 	process.exit(1);
 }
 
-var configFullPath = resolvePath(process.cwd(), args.config)
+var configFullPath = path.resolve(args.config)
 var file = require(configFullPath);
 if (!file.queries) {
 	console.error("Config file does not contain 'queries' array");
@@ -134,8 +134,14 @@ function fetchPages(issues, queries) {
 function fetchAll (oldSnapshot) {
 	fetchPages(issues, queries).then((issues) => {
       var res = applyNewIssuesToSnapshot(issues, oldSnapshot, args.unmatched);
-      const lines = res.split("\n");
-      lines.forEach(line => process.stdout.write(`${line}\n`));
+      if (file.saveSnapshotPath) {
+        const saveSnapshotFullPath = path.resolve(file.saveSnapshotPath);
+        fs.writeFileSync(saveSnapshotFullPath, res);
+      }
+      else {
+        const lines = res.split("\n");
+        lines.forEach(line => process.stdout.write(`${line}\n`));
+      }
       process.exit();
     }).catch((err) => {
       console.error("Error in creating Markdown", err);
@@ -143,14 +149,22 @@ function fetchAll (oldSnapshot) {
     });
 }
 
-const getStdin = require('get-stdin');
- 
 
-var noStdIn = setTimeout(() => {
-	fetchAll();
-}, 1000);
+if (file.loadSnapshotPath) {
+  const loadSnapshotFullPath = path.resolve(file.loadSnapshotPath);
+  const str = fs.readFileSync(loadSnapshotFullPath, 'utf8');
+  fetchAll(str);
+}
+else {
+  const getStdin = require('get-stdin');
 
-getStdin().then(str => {
-	clearTimeout(noStdIn);
-	fetchAll(str);
-});
+  var noStdIn = setTimeout(() => {
+    fetchAll();
+  }, 1000);
+
+  getStdin().then(str => {
+    clearTimeout(noStdIn);
+    fetchAll(str);
+  });
+}
+
